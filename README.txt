@@ -11,10 +11,10 @@ cURL (http://curl.haxx.se/download.html)
 
 Progress
 --------
-- Checks every n minutes for an update
+- Checks every n specified minutes for an update
 - Shows an image (update.gif) when there is an update. Press ESC to close image.
+- Click image to close (instead of having to press ESC)
 
 Todo
 ----
-- Click image to close (instead of ahving to press ESC)
-- GUI for image choosing 
+-
