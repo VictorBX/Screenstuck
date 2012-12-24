@@ -8,13 +8,16 @@ Requires
 --------
 SFML v2.0 API (http://www.sfml-dev.org/download.php)
 cURL (http://curl.haxx.se/download.html)
+Windows API
 
 Progress
 --------
 - Checks every n specified minutes for an update
 - Shows an image (update.gif) when there is an update. Press ESC to close image.
 - Click image to close (instead of having to press ESC)
+- Opens a new window or tab with the first page of the new update.
 
 Todo
 ----
--
+- Checking for a valid update.gif in the directory
+- Maybe changing the extension of the update.[extension] to allow gif,png, or jpg

@@ -64,8 +64,9 @@ int main(void)
         //location at which xml is saved
         ofstream fileout("xmldata.txt");
 
-        //location of the publication date on xml
+        //location of the publication date and link on xml
         int pubdate = 0;
+        int linkloc = 0;
         size_t loc;
 
         curl = curl_easy_init();
@@ -93,28 +94,46 @@ int main(void)
             int length_pdate = 31;
             string save = output.substr(start_pdate,length_pdate);
 
+            //grabbing the new comic link
+            loc = output.find("p=");
+            linkloc = int(loc);
+            int start_link = linkloc+2;
+            int length_link = 6;
+            string link_num = output.substr(start_link,length_link);
+
             //if the saveout file is empty, then write the date of the
-            //newest update in the saveou file
+            //newest update and comic link in the saveout file
             if(file_empty()==true)
             {
                 ofstream saveout("savedate.txt");
                 saveout << output.substr(start_pdate,length_pdate) << endl;
+                saveout << link_num << endl;
                 saveout.close();
             }
 
             //Using the new xml file in fileout, check the new date of
             //the latest update and compare it to the date in saveout
-            //every minute. If different, theer is an update.
+            //every minute. If different, there is an update.
+            //Also grab the old comic link
             ifstream savecomp("savedate.txt");
             string compare;
+            string link_comp;
             getline(savecomp,compare);
+            getline(savecomp,link_comp);
             savecomp.close();
             if(output.substr(start_pdate,length_pdate) != compare)
             {
-                //update savedate file with the new update
+                //update savedate file with the new update and comic link
                 ofstream saveout("savedate.txt");
                 saveout << output.substr(start_pdate,length_pdate) << endl;
+                saveout << output.substr(start_link, length_link) << endl;
                 saveout.close();
+
+                //updating comic link by 1 to start the comic from the first page update
+                int link_inum = atoi(link_comp.c_str()) + 1;
+                stringstream itos;
+                itos << link_inum;
+                string new_page = itos.str();
 
                 //output screen saying update
                 //Setting up the image
@@ -144,7 +163,12 @@ int main(void)
 
                         //pressing escape
                         if ((event.type == sf::Event::KeyPressed) && (event.key.code == sf::Keyboard::Escape))
+                        {
                             App.close();
+                            //pop-up or open a new tab with the first new page of the comic
+                            string url_input = "http://www.mspaintadventures.com/?s=6&p=00"+new_page;
+                            ShellExecute(NULL, "open", url_input.c_str(), NULL, NULL, SW_SHOWNORMAL);
+                        }
 
                         //clicking the image to close window
                         if(sf::Mouse::isButtonPressed(sf::Mouse::Left))
@@ -153,6 +177,9 @@ int main(void)
                             if(mouse_pos.x >screens.width-upd_size.x && mouse_pos.y < upd_size.y)
                             {
                                 App.close();
+                                //pop-up or open a new tab with the first new page of the comic
+                                string url_input = "http://www.mspaintadventures.com/?s=6&p=00"+new_page;
+                                ShellExecute(NULL, "open", url_input.c_str(), NULL, NULL, SW_SHOWNORMAL);
                             }
                         }
                     }
