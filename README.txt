@@ -8,7 +8,7 @@ Requires
 --------
 SFML v2.0 API (http://www.sfml-dev.org/download.php)
 cURL (http://curl.haxx.se/download.html)
-Windows API
+Win32 API
 
 Progress
 --------
@@ -19,5 +19,4 @@ Progress
 
 Todo
 ----
-- Checking for a valid update.gif in the directory
-- Maybe changing the extension of the update.[extension] to allow gif,png, or jpg
+- Ditch console and implement GUI

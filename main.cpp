@@ -1,59 +1,8 @@
-#include <SFML/Graphics.hpp>
-#include <stdio.h>
-#include <sstream>
-#include <curl/curl.h>
-#include <stdlib.h>
-#include <iostream>
-#include <fstream>
-#include <windows.h>
-
-
-using namespace std;
-
-//inform curl to use this function when writing data
-size_t write_data(char *ptr, size_t size, size_t nmemb, void *userdata)
-{
-    ostringstream *stream = (ostringstream*)userdata;
-    size_t count = size * nmemb;
-    stream->write(ptr, count);
-    return count;
-}
-
-//checks to see if the file is empty
-bool file_empty()
-{
-    ifstream savein("savedate.txt");
-    string temp;
-    getline(savein,temp);
-    bool fempty=false;
-    if(temp.length()== 0)
-    {
-        //cout << "file empty" << endl;
-        fempty = true;
-    }
-    savein.close();
-    return fempty;
-}
-
-//Setup the sleep time
-unsigned int sleep_time()
-{
-    unsigned int t_sleep=0;
-    cout << "Refresh time (in minutes): ";
-    cin >> t_sleep;
-    while(t_sleep<1)
-    {
-        cout << endl << "Please enter >= 1 minutes: ";
-        cin >> t_sleep;
-    }
-    cout << endl;
-    return t_sleep;
-}
+#include "functions.h"
 
 int main(void)
 {
-    //time for sleep
-    unsigned int total_sleep = 60000*sleep_time();
+    unsigned int total_wait = intro();
 
     while(true)
     {
@@ -139,8 +88,10 @@ int main(void)
                 //Setting up the image
                 sf::Image upd_img;
                 sf::Texture upd_tex;
-                upd_img.loadFromFile("update.gif");
-                upd_tex.loadFromFile("update.gif");
+
+                if(!upd_img.loadFromFile("update.gif"));
+                if(!upd_tex.loadFromFile("update.gif"));
+
                 sf::Sprite upd_spr;
                 upd_spr.setTexture(upd_tex);
                 sf::Vector2u upd_size =  upd_img.getSize();
@@ -196,7 +147,7 @@ int main(void)
             }
 
             //sleep for total_sleep minutes
-            Sleep(total_sleep);
+            wait_time(total_wait);
 
             //always cleanup
             curl_easy_cleanup(curl);
